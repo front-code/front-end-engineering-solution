@@ -22,6 +22,8 @@
     "gulp-util": "^3.0.7",
     "html-webpack-plugin": "^1.7.0",
     "image-loader": "0.0.1",
+    "image-webpack-loader": "^1.6.3",
+    "imagemin": "^4.0.0",
     "jquery": "^2.2.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
@@ -35,9 +37,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf assets && rm -rf build && rm -rf webpack-assets.json",
-    "webpack-dev": "set NODE_ENV=development && webpack --config webpack.config.js --colors --hide-modules --watch",
-    "webpack-dev-server": "webpack-dev-server",
-    "release": "gulp"
+    "start": "node-dev server.js",
+    "webpack-dev": "gulp clean && webpack --config webpack.config.js --colors --hide-modules --watch",
+    "webpack-dev-server": "gulp clean && webpack-dev-server",
+    "dev": "NODE_DEV=development && gulp dev",
+    "release": "NODE_DEV=production && gulp release"
   },
   "repository": {
     "type": "git",

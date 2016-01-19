@@ -8,18 +8,24 @@ var gutil = require('gulp-util');
 var webpackConf = require('./webpack.config');
 
 var paths = {
-	"assets": "./assets"
+	"assets": "./assets",
+    "build": "./build"
 }
 
-gulp.task('default', ['pack'], function(){
+gulp.task('release', ['pack'], function(){
     run('minhtmlAndRemoveScript');
+});
+
+gulp.task('dev', ['pack'], function(){
+    run('removeScript');
 });
 
 // clean assets
 gulp.task('clean', function() {
     var clean = require('gulp-clean');
 
-    return gulp.src(paths.assets, {read: true}).pipe(clean());
+    gulp.src(paths.assets, {read: true}).pipe(clean());
+    gulp.src(paths.build, {read: true}).pipe(clean());
 });
 
 // run webpack pack
@@ -30,7 +36,20 @@ gulp.task('pack', ['clean'], function(done) {
         done();
     });
 });
+gulp.task('removeScript', function() {
+    var replace = require('gulp-replace');
+    // var htmlmin = require('gulp-htmlmin');
 
+    return gulp
+        .src(paths.build + '/**/*.html')
+        .pipe(replace(/<script(.+)?data-debug([^>]+)?><\/script>/g, ''))
+        // @see https://github.com/kangax/html-minifier
+        // .pipe(htmlmin({
+        //     collapseWhitespace: true,
+        //     removeComments: true
+        // }))
+        .pipe(gulp.dest(paths.build));
+});
 
 gulp.task('minhtmlAndRemoveScript', function() {
     var replace = require('gulp-replace');
